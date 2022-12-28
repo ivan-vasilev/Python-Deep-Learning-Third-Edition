@@ -138,8 +138,8 @@ class NeuralNetwork:
                         s=80,
                         label=classes[idx])
 
-        plt.xlabel('x-axis')
-        plt.ylabel('y-axis')
+        plt.xlabel('x1')
+        plt.ylabel('x2')
         plt.legend(loc='upper left')
         plt.show()
 

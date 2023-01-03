@@ -3,14 +3,14 @@ print("Classifying MNIST with a fully-connected Keras network with one hidden la
 from keras.datasets import mnist
 from keras.utils import np_utils
 
-(X_train, Y_train), (X_test, Y_test) = mnist.load_data()
+(X_train, Y_train), (X_validation, Y_validation) = mnist.load_data()
 
 X_train = X_train.reshape(60000, 784) / 255
-X_test = X_test.reshape(10000, 784) / 255
+X_validation = X_validation.reshape(10000, 784) / 255
 
 classes = 10
 Y_train = np_utils.to_categorical(Y_train, classes)
-Y_test = np_utils.to_categorical(Y_test, classes)
+Y_validation = np_utils.to_categorical(Y_validation, classes)
 
 from keras.layers import BatchNormalization
 from keras.layers.core import Dense, Activation
@@ -36,8 +36,8 @@ model.fit(X_train, Y_train,
           batch_size=100, epochs=20,
           verbose=1)
 
-score = model.evaluate(X_test, Y_test, verbose=1)
-print('Test accuracy:', score[1])
+score = model.evaluate(X_validation, Y_validation, verbose=1)
+print('Validation accuracy:', score[1])
 
 weights = model.layers[0].get_weights()
 

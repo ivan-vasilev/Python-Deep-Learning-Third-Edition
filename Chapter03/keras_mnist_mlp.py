@@ -1,7 +1,7 @@
+print("Classifying MNIST with a fully-connected Keras network with one hidden layer")
+
 from keras.datasets import mnist
 from keras.utils import np_utils
-
-print("Classifying MNIST with a fully-connected Keras network with one hidden layer")
 
 (X_train, Y_train), (X_test, Y_test) = mnist.load_data()
 

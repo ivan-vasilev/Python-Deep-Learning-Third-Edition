@@ -52,6 +52,9 @@ optimizer = torch.optim.Adam(model.parameters())
 
 
 def train_model(model, cost_function, optimizer, data_loader):
+    # send the model to the GPU
+    model.to(device)
+
     # set model to training mode
     model.train()
 
@@ -88,6 +91,9 @@ def train_model(model, cost_function, optimizer, data_loader):
 
 
 def test_model(model, cost_function, data_loader):
+    # send the model to the GPU
+    model.to(device)
+
     # set model in evaluation mode
     model.eval()
 

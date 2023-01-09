@@ -1,6 +1,7 @@
 print("Classifying MNIST with a fully-connected PyTorch network with one hidden layer")
 
 import torch
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 from torchvision import datasets
@@ -34,14 +35,12 @@ validation_loader = DataLoader(
     batch_size=100,
     shuffle=True)
 
-import torch
-
 torch.manual_seed(1234)
 
 hidden_units = 100
 classes = 10
 
-net = torch.nn.Sequential(
+model = torch.nn.Sequential(
     torch.nn.Linear(28 * 28, hidden_units),
     torch.nn.BatchNorm1d(hidden_units),
     torch.nn.ReLU(),
@@ -49,7 +48,7 @@ net = torch.nn.Sequential(
 )
 
 cost_func = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(net.parameters())
+optimizer = torch.optim.Adam(model.parameters())
 
 
 def train_model(model, cost_function, optimizer, data_loader):
@@ -122,6 +121,6 @@ def test_model(model, cost_function, data_loader):
 epochs = 20
 for epoch in range(epochs):
     print('Epoch {}/{}'.format(epoch + 1, epochs))
-    train_model(net, cost_func, optimizer, train_loader)
+    train_model(model, cost_func, optimizer, train_loader)
 
-test_model(net, cost_func, validation_loader)
+test_model(model, cost_func, validation_loader)

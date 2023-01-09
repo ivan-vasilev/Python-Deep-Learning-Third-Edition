@@ -1,18 +1,25 @@
 print("Classifying MNIST with a fully-connected PyTorch network with one hidden layer")
 
+import torch
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
 from torchvision import datasets
-from torchvision.transforms import ToTensor
+from torchvision.transforms import ToTensor, Lambda, Compose
 
 train_data = datasets.MNIST(
     root='data',
     train=True,
-    transform=ToTensor(),
+    transform=Compose(
+        [ToTensor(),
+         Lambda(lambda x: torch.flatten(x))]),
     download=True,
 )
 validation_data = datasets.MNIST(
     root='data',
     train=False,
-    transform=ToTensor()
+    transform=Compose(
+        [ToTensor(),
+         Lambda(lambda x: torch.flatten(x))]),
 )
 
 from torch.utils.data import DataLoader
@@ -44,40 +51,77 @@ net = torch.nn.Sequential(
 cost_func = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(net.parameters())
 
+
+def train_model(model, cost_function, optimizer, data_loader):
+    # set model to training mode
+    model.train()
+
+    current_loss = 0.0
+    current_acc = 0
+
+    # iterate over the training data
+    for i, (inputs, labels) in enumerate(data_loader):
+        # send the input/labels to the GPU
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        # zero the parameter gradients
+        optimizer.zero_grad()
+
+        with torch.set_grad_enabled(True):
+            # forward
+            outputs = model(inputs)
+            _, predictions = torch.max(outputs, 1)
+            loss = cost_function(outputs, labels)
+
+            # backward
+            loss.backward()
+            optimizer.step()
+
+        # statistics
+        current_loss += loss.item() * inputs.size(0)
+        current_acc += torch.sum(predictions == labels.data)
+
+    total_loss = current_loss / len(data_loader.dataset)
+    total_acc = current_acc.double() / len(data_loader.dataset)
+
+    print('Train Loss: {:.4f}; Accuracy: {:.4f}'.format(total_loss, total_acc))
+
+
+def test_model(model, cost_function, data_loader):
+    # set model in evaluation mode
+    model.eval()
+
+    current_loss = 0.0
+    current_acc = 0
+
+    # iterate over  the validation data
+    for i, (inputs, labels) in enumerate(data_loader):
+        # send the input/labels to the GPU
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        # forward
+        with torch.set_grad_enabled(False):
+            outputs = model(inputs)
+            _, predictions = torch.max(outputs, 1)
+            loss = cost_function(outputs, labels)
+
+        # statistics
+        current_loss += loss.item() * inputs.size(0)
+        current_acc += torch.sum(predictions == labels.data)
+
+    total_loss = current_loss / len(data_loader.dataset)
+    total_acc = current_acc.double() / len(data_loader.dataset)
+
+    print('Test Loss: {:.4f}; Accuracy: {:.4f}'.format(total_loss, total_acc))
+
+    return total_loss, total_acc
+
+
 epochs = 20
-
 for epoch in range(epochs):
-    train_loss = 0
+    print('Epoch {}/{}'.format(epoch + 1, epochs))
+    train_model(net, cost_func, optimizer, train_loader)
 
-    for i, (inputs, targets) in enumerate(train_loader):
-        # Flatten 28x28 images into a 784 long vector
-        inputs = inputs.view(inputs.shape[0], -1)
-
-        optimizer.zero_grad()  # Zero the gradient
-        out = net(inputs)  # Forward pass
-        loss = cost_func(out, targets)  # Compute loss
-        loss.backward()  # Backward pass
-        optimizer.step()  # Weight updates
-
-        train_loss += loss.item() * inputs.size(0)  # Aggregate loss
-
-    train_loss /= len(train_loader.dataset)
-    print('Epoch %d, Loss: %.4f' % (epoch + 1, train_loss))
-
-net.eval()  # set network for evaluation
-validation_loss = correct = 0
-for inputs, target in validation_loader:
-    # Flatten 28x28 images into a 784 long vector
-    inputs = inputs.view(inputs.shape[0], -1)
-
-    out = net(inputs)  # Forward pass
-    loss = cost_func(out, target)  # Compute loss
-
-    # update running validation loss and accuracy
-    validation_loss += loss.item() * inputs.size(0)
-    pred = out.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
-    correct += pred.eq(target.view_as(pred)).sum().item()
-
-correct = 100 * correct / len(validation_loader.dataset)
-validation_loss /= len(validation_loader.dataset)
-print('Accuracy: %.1f, Validation loss: %.4f' % (correct, validation_loss))
+test_model(net, cost_func, validation_loader)

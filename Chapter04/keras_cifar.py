@@ -11,12 +11,10 @@ Y_validation = keras.utils.to_categorical(Y_validation, 10)
 from keras.preprocessing.image import ImageDataGenerator
 
 data_generator = ImageDataGenerator(
-    rotation_range=90,
-    width_shift_range=0.1,
-    height_shift_range=0.1,
     featurewise_center=True,
     featurewise_std_normalization=True,
-    horizontal_flip=True)
+    horizontal_flip=True,
+    vertical_flip=True)
 
 # Apply z-normalization on the training set
 data_generator.fit(X_train)

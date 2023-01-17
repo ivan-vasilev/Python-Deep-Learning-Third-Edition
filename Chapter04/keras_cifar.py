@@ -1,9 +1,9 @@
 print("CIFAR-10 with Keras convolutional network")
 
-import keras
-from keras.datasets import cifar10
+from tensorflow import keras
 
-(X_train, Y_train), (X_validation, Y_validation) = cifar10.load_data()
+(X_train, Y_train), (X_validation, Y_validation) = \
+    keras.datasets.cifar10.load_data()
 
 Y_train = keras.utils.to_categorical(Y_train, 10)
 Y_validation = keras.utils.to_categorical(Y_validation, 10)
@@ -22,41 +22,40 @@ data_generator.fit(X_train)
 # Standardize the validation set
 X_validation = data_generator.standardize(X_validation.astype('float32'))
 
-from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, Activation, Flatten, BatchNormalization
+from keras import layers, models
 
-model = Sequential(layers=[
-    Conv2D(32, (3, 3),
-           padding='same',
-           input_shape=X_train.shape[1:]),
-    BatchNormalization(),
-    Activation('gelu'),
-    Conv2D(32, (3, 3), padding='same'),
-    BatchNormalization(),
-    Activation('gelu'),
-    MaxPooling2D(pool_size=(2, 2)),
-    Dropout(0.2),
+model = models.Sequential(layers=[
+    layers.Conv2D(32, (3, 3),
+                  padding='same',
+                  input_shape=X_train.shape[1:]),
+    layers.BatchNormalization(),
+    layers.Activation('gelu'),
+    layers.Conv2D(32, (3, 3), padding='same'),
+    layers.BatchNormalization(),
+    layers.Activation('gelu'),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+    layers.Dropout(0.2),
 
-    Conv2D(64, (3, 3), padding='same'),
-    BatchNormalization(),
-    Activation('gelu'),
-    Conv2D(64, (3, 3), padding='same'),
-    BatchNormalization(),
-    Activation('gelu'),
-    MaxPooling2D(pool_size=(2, 2)),
-    Dropout(0.3),
+    layers.Conv2D(64, (3, 3), padding='same'),
+    layers.BatchNormalization(),
+    layers.Activation('gelu'),
+    layers.Conv2D(64, (3, 3), padding='same'),
+    layers.BatchNormalization(),
+    layers.Activation('gelu'),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+    layers.Dropout(0.3),
 
-    Conv2D(128, (3, 3)),
-    BatchNormalization(),
-    Activation('gelu'),
-    Conv2D(128, (3, 3)),
-    BatchNormalization(),
-    Activation('gelu'),
-    MaxPooling2D(pool_size=(2, 2)),
-    Dropout(0.5),
+    layers.Conv2D(128, (3, 3)),
+    layers.BatchNormalization(),
+    layers.Activation('gelu'),
+    layers.Conv2D(128, (3, 3)),
+    layers.BatchNormalization(),
+    layers.Activation('gelu'),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+    layers.Dropout(0.5),
 
-    Flatten(),
-    Dense(10, activation='softmax')
+    layers.Flatten(),
+    layers.Dense(10, activation='softmax')
 ])
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])

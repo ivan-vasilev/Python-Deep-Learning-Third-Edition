@@ -1,30 +1,29 @@
 print("Classifying MNIST with a fully-connected Keras network with one hidden layer")
 
-from keras.datasets import mnist
-from keras.utils import np_utils
+from tensorflow import keras
 
-(X_train, Y_train), (X_validation, Y_validation) = mnist.load_data()
+(X_train, Y_train), (X_validation, Y_validation) = \
+    keras.datasets.mnist.load_data()
 
 X_train = X_train.reshape(60000, 784) / 255
 X_validation = X_validation.reshape(10000, 784) / 255
 
 classes = 10
-Y_train = np_utils.to_categorical(Y_train, classes)
-Y_validation = np_utils.to_categorical(Y_validation, classes)
+Y_train = keras.utils.to_categorical(Y_train, classes)
+Y_validation = keras.utils.to_categorical(Y_validation, classes)
 
-from keras.layers import BatchNormalization
-from keras.layers.core import Dense, Activation
-from keras.models import Sequential
+from keras import layers, models
 
 input_size = 784
 hidden_units = 100
 
-model = Sequential([
-    Dense(hidden_units, input_dim=input_size),
-    BatchNormalization(),
-    Activation('relu'),
-    Dense(classes),
-    Activation('softmax')
+model = models.Sequential([
+    layers.Dense(
+        hidden_units, input_dim=input_size),
+    layers.BatchNormalization(),
+    layers.Activation('relu'),
+    layers.Dense(classes),
+    layers.Activation('softmax')
 ])
 
 model.compile(

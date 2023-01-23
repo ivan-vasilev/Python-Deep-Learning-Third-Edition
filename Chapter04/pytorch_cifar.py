@@ -17,14 +17,14 @@ train_transform = transforms.Compose([
 ])
 
 train_data = datasets.CIFAR10(
-    'data',
+    root='data',
     train=True,
     download=True,
     transform=train_transform)
 
 batch_size = 50
 train_loader = DataLoader(
-    train_data,
+    dataset=train_data,
     batch_size=batch_size,
     shuffle=True,
     num_workers=2)
@@ -38,13 +38,13 @@ validation_transform = transforms.Compose([
 ])
 
 validation_data = datasets.CIFAR10(
-    'data',
+    root='data',
     train=False,
     download=True,
     transform=validation_transform)
 
 validation_loader = DataLoader(
-    validation_data,
+    dataset=validation_data,
     batch_size=100,
     shuffle=True)
 

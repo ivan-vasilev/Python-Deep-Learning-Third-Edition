@@ -26,12 +26,12 @@ validation_data = datasets.MNIST(
 from torch.utils.data import DataLoader
 
 train_loader = DataLoader(
-    train_data,
+    dataset=train_data,
     batch_size=100,
     shuffle=True)
 
 validation_loader = DataLoader(
-    validation_data,
+    dataset=validation_data,
     batch_size=100,
     shuffle=True)
 

@@ -17,14 +17,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import tensorflow as tf
-import tensorflow_datasets as tfds
-
 IMG_SIZE = 224
 BATCH_SIZE = 50
 
-data, metadata = tfds.load('cifar10', with_info=True, as_supervised=True)
+import tensorflow as tf
+import tensorflow_datasets as tfds
 
+data, metadata = tfds.load('cifar10', with_info=True, as_supervised=True)
 raw_train, raw_test = data['train'].repeat(), data['test'].repeat()
 
 
@@ -60,7 +59,7 @@ test_batches = test_data.batch(BATCH_SIZE)
 
 
 def build_fe_model():
-    """"Create feature extraction model from the pre-trained model ResNet50V2"""
+    """"Create feature extraction model from the pre-trained model MobileNetV3Small"""
 
     # create the pre-trained part of the network, excluding FC layers
     base_model = tf.keras.applications.MobileNetV3Small(
@@ -85,7 +84,7 @@ def build_fe_model():
 
 
 def build_ft_model():
-    """"Create fine tuning model from the pre-trained model ResNet50V2"""
+    """"Create fine tuning model from the pre-trained model MobileNetV3Small"""
 
     # create the pre-trained part of the network, excluding FC layers
     base_model = tf.keras.applications.MobileNetV3Small(
@@ -161,12 +160,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.ft:
-        print("Transfer learning: fine tuning with Keras ResNet50V2 network for CIFAR-10")
+        print("Transfer learning: fine tuning with Keras MobileNetV3Small network for CIFAR-10")
         model = build_ft_model()
         model.summary()
         train_model(model)
     elif args.fe:
-        print("Transfer learning: feature extractor with Keras ResNet50V2 network for CIFAR-10")
+        print("Transfer learning: feature extractor with Keras MobileNetV3Small network for CIFAR-10")
         model = build_fe_model()
         model.summary()
         train_model(model)

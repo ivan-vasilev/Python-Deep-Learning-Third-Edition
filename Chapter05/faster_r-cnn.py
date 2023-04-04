@@ -1,43 +1,10 @@
 import os.path
 
-# Download object detection image
-import requests
-
-image_file = 'source_2.png'
-if not os.path.isfile(image_file):
-    url = "https://github.com/ivan-vasilev/advanced-deep-learning-with-python/blob/master/chapter04-detection-segmentation/source_2.png"
-    r = requests.get(url)
-    with open(image_file, 'wb') as f:
-        f.write(r.content)
-
-# load the pytorch model
-from torchvision.models.detection import \
-    FasterRCNN_ResNet50_FPN_V2_Weights, \
-    fasterrcnn_resnet50_fpn_v2
-
-model = fasterrcnn_resnet50_fpn_v2(
-    weights=FasterRCNN_ResNet50_FPN_V2_Weights.DEFAULT)
-
-# set the model in evaluation mode
-model.eval()
-
-# read the image file
-import cv2
-img = cv2.imread(image_file)
-
-# transform the input to tensor
-import torchvision.transforms as transforms
-
-transform = transforms.Compose([
-    transforms.ToPILImage(),
-    transforms.ToTensor()
-])
-
-nn_input = transform(img)
-detected_objects = model([nn_input])
+import numpy as np
 
 
-def draw_bboxes(image, det_objects):
+def draw_bboxes(image: np.array, det_objects: dict):
+    """Draw bounding boxes and predicted classes"""
     # COCO dataset class names
     classes = [
         'background', 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
@@ -91,6 +58,43 @@ def draw_bboxes(image, det_objects):
                         color=color,
                         thickness=2)
 
+
+# Download object detection image
+import requests
+
+image_file = 'source_2.png'
+if not os.path.isfile(image_file):
+    url = 'https://github.com/ivan-vasilev/Python-Deep-Learning-3rd-Edition/blob/main/Chapter05/source_2.png'
+    r = requests.get(url)
+    with open(image_file, 'wb') as f:
+        f.write(r.content)
+
+# load the pytorch model
+from torchvision.models.detection import \
+    FasterRCNN_ResNet50_FPN_V2_Weights, \
+    fasterrcnn_resnet50_fpn_v2
+
+model = fasterrcnn_resnet50_fpn_v2(
+    weights=FasterRCNN_ResNet50_FPN_V2_Weights.DEFAULT)
+
+# set the model in evaluation mode
+model.eval()
+
+# read the image file
+import cv2
+
+img = cv2.imread(image_file)
+
+# transform the input to tensor
+import torchvision.transforms as transforms
+
+transform = transforms.Compose([
+    transforms.ToPILImage(),
+    transforms.ToTensor()
+])
+
+nn_input = transform(img)
+detected_objects = model([nn_input])
 
 draw_bboxes(img, detected_objects)
 

@@ -45,16 +45,16 @@ def draw_bboxes(image: np.array, det_objects: dict):
                           pt1=box[0],
                           pt2=box[1],
                           color=color,
-                          thickness=2)
+                          thickness=4)
 
             # display the box class label
             cv2.putText(img=image,
                         text=class_name,
                         org=box[0],
                         fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-                        fontScale=1,
+                        fontScale=2,
                         color=color,
-                        thickness=2)
+                        thickness=4)
 
 
 # Download object detection image

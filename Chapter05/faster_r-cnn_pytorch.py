@@ -1,5 +1,3 @@
-import os.path
-
 import numpy as np
 
 
@@ -61,6 +59,7 @@ def draw_bboxes(image: np.array, det_objects: dict):
 
 # Download object detection image
 import requests
+import os.path
 
 image_file = 'source_2.png'
 if not os.path.isfile(image_file):

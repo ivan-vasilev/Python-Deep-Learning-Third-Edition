@@ -61,11 +61,11 @@ def draw_bboxes(image: np.array, det_objects: dict):
 import requests
 import os.path
 
-image_file = 'source_2.png'
-if not os.path.isfile(image_file):
+image_file_path = 'source_2.png'
+if not os.path.isfile(image_file_path):
     url = 'https://github.com/ivan-vasilev/Python-Deep-Learning-3rd-Edition/blob/main/Chapter05/source_2.png'
     r = requests.get(url)
-    with open(image_file, 'wb') as f:
+    with open(image_file_path, 'wb') as f:
         f.write(r.content)
 
 # load the pytorch model
@@ -82,15 +82,12 @@ model.eval()
 # read the image file
 import cv2
 
-img = cv2.imread(image_file)
+img = cv2.imread(image_file_path)
 
 # transform the input to tensor
 import torchvision.transforms as transforms
 
-transform = transforms.Compose([
-    transforms.ToPILImage(),
-    transforms.ToTensor()
-])
+transform = transforms.ToTensor()
 
 nn_input = transform(img)
 detected_objects = model([nn_input])

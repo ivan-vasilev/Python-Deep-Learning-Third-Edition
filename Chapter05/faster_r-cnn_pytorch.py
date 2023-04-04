@@ -29,7 +29,7 @@ def draw_bboxes(image: np.array, det_objects: dict):
                                      det_objects[0]['labels'].detach().numpy(),
                                      det_objects[0]['scores'].detach().numpy()):
 
-        # filter the boxes by score
+        # filter the boxes by objectness score
         if score > 0.5:
             # transform bounding box format
             box = [(box[0], box[1]), (box[2], box[3])]
@@ -90,6 +90,8 @@ import torchvision.transforms as transforms
 transform = transforms.ToTensor()
 
 nn_input = transform(img)
+
+# run the model
 detected_objects = model([nn_input])
 
 draw_bboxes(img, detected_objects)

@@ -34,26 +34,20 @@ def draw_bboxes(image: np.array, det_objects: dict):
             # transform bounding box format
             box = [(box[0], box[1]), (box[2], box[3])]
 
-            # select class color
-            color = colors[box_class]
-
-            # extract class name
-            class_name = classes[box_class]
-
             # draw the bounding box
             cv2.rectangle(img=image,
                           pt1=box[0],
                           pt2=box[1],
-                          color=color,
+                          color=colors[box_class],
                           thickness=4)
 
             # display the box class label
             cv2.putText(img=image,
-                        text=class_name,
+                        text=classes[box_class],
                         org=box[0],
                         fontFace=cv2.FONT_HERSHEY_SIMPLEX,
                         fontScale=2,
-                        color=color,
+                        color=colors[box_class],
                         thickness=4)
 
 

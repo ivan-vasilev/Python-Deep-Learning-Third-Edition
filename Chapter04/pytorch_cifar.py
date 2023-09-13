@@ -49,7 +49,6 @@ validation_loader = DataLoader(
     shuffle=True)
 
 torch.manual_seed(1234)
-classes = 10
 
 from torch.nn import Sequential, Conv2d, BatchNorm2d, GELU, MaxPool2d, Dropout2d, Linear, Flatten
 
@@ -88,7 +87,7 @@ model = Sequential(
     Dropout2d(p=0.5),
     Flatten(),
 
-    Linear(512, classes),
+    Linear(512, 10),
 )
 
 

@@ -57,7 +57,7 @@ import os.path
 
 image_file_path = 'source_2.png'
 if not os.path.isfile(image_file_path):
-    url = 'https://github.com/ivan-vasilev/Python-Deep-Learning-3rd-Edition/blob/main/Chapter05/source_2.png'
+    url = 'https://github.com/ivan-vasilev/Python-Deep-Learning-3rd-Edition/blob/main/Chapter05/source_2.png?raw=true'
     r = requests.get(url)
     with open(image_file_path, 'wb') as f:
         f.write(r.content)

@@ -1,7 +1,7 @@
 # ENV VARIABLES
 import os
-os.environ['SERPAPI_API_KEY'] = 'b0df2fb686075bfdc295042e1a3ff7ab86de577b4d28ba5c8d39106995b3acd6'
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['SERPAPI_API_KEY'] = 'YOUR_SERPAPI_API_KEY_HERE'
+os.environ['OPENAI_API_KEY'] = 'YOUR_OPENAI_API_KEY_HERE'
 # END ENV VARIABLES
 
 # Define the model

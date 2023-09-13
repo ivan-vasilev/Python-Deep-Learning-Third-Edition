@@ -4,7 +4,7 @@ from ultralytics import YOLO
 model = YOLO("yolov8n.pt")
 
 # Detect objects on a Wikipedia image
-results = model.predict('https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/2011_FIA_GT1_Silverstone_2.jpg/1024px-2011_FIA_GT1_Silverstone_2.jpg')
+results = model.predict('https://github.com/ivan-vasilev/Python-Deep-Learning-3rd-Edition/blob/main/Chapter05/wikipedia-2011_FIA_GT1_Silverstone_2.jpg?raw=true')
 
 # convert results->numpy_array->Image and display it
 from PIL import Image

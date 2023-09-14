@@ -9,12 +9,12 @@ Original file is located at
 Install the prerequisites:
 """
 
-!pip install transformers
-!pip install accelerate
+# !pip install transformers
+# !pip install accelerate
 
 """Login into HuggingFace, so the program can access the stored models. The Llama series requires additional registration with Meta:"""
 
-!huggingface-cli login
+# !huggingface-cli login
 
 """Do the imports:"""
 

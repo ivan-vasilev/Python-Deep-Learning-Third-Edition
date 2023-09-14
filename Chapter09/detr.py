@@ -9,8 +9,8 @@ Original file is located at
 Install the necessary libraries:
 """
 
-!pip install transformers
-!pip install timm
+# !pip install transformers
+# !pip install timm
 
 """Import the pipeline abstraction:"""
 
